@@ -1,0 +1,29 @@
+{
+  "name": "piservices-openapi",
+  "version": "0.1.0",
+  "description": "Easy way to define REST services in typescript from Swagger/OpenApi definition file",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "private": true,
+  "scripts": {
+    "prepare": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "picodegen": "bin/picodegen"
+  },
+  "keywords": [],
+  "author": "Wilfredo <wilfredo@pomgui.com> (https://github.com/pomgui)",
+  "license": "MIT",
+  "dependencies": {
+    "arg": "^4.1.1",
+    "js-yaml": "^3.13.1"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^3.12.1",
+    "@types/node": "^12.7.5",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.3"
+  },
+  "optionalDependencies": {}
+}
