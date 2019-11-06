@@ -1,0 +1,39 @@
+{
+  "name": "pirest-codegen",
+  "version": "0.1.0",
+  "description": "Typescript code generator from Swagger/OpenApi definition file using pirest lib",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prepare": "tsc",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "picodegen": "./dist/picodegen.js",
+    "pipathtsc": "./dist/pipathtsc.js"
+  },
+  "keywords": [],
+  "author": "Wilfredo <wilfredo@pomgui.com> (https://github.com/pomgui)",
+  "license": "MIT",
+  "dependencies": {
+    "arg": "^4.1.1",
+    "js-yaml": "^3.13.1",
+    "klaw": "^3.0.0",
+    "mustache": "^3.1.0",
+    "pirest-lib": "file:/pi/pirest-lib"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^3.12.1",
+    "@types/klaw": "^3.0.0",
+    "@types/mustache": "^0.8.32",
+    "@types/node": "^12.7.5",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.3"
+  },
+  "optionalDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pomgui/pirest-codegen.git"
+  }
+}

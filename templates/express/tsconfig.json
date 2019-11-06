@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "commonjs",
+    "outDir": "./build",
+    "strict": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "baseUrl": ".",
+    "paths": {
+      {{#cfg.model.dirAlias}}
+      "{{.}}": [ "{{cfg.model.dir}}" ],
+      "{{.}}/*": [ "{{cfg.model.dir}}/*" ],
+      {{/cfg.model.dirAlias}}
+      {{#cfg.params.dirAlias}}
+      "{{.}}": [ "{{cfg.params.dir}}" ],
+      "{{.}}/*": [ "{{cfg.params.dir}}/*" ],
+      {{/cfg.params.dirAlias}}
+      {{#cfg.service.dirAlias}}
+      "{{.}}": [ "{{cfg.service.dir}}" ],
+      "{{.}}/*": [ "{{cfg.service.dir}}/*" ],
+      {{/cfg.service.dirAlias}}
+      "!!filler": ["!!filler"]
+    }
+  }
+}

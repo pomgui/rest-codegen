@@ -1,0 +1,41 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2015",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2018",
+      "dom"
+    ],
+    "paths": {
+      {{#cfg.model.dirAlias}}
+      "{{.}}": [ "{{cfg.model.dir}}" ],
+      "{{.}}/*": [ "{{cfg.model.dir}}/*" ],
+      {{/cfg.model.dirAlias}}
+      {{#cfg.params.dirAlias}}
+      "{{.}}": [ "{{cfg.params.dir}}" ],
+      "{{.}}/*": [ "{{cfg.params.dir}}/*" ],
+      {{/cfg.params.dirAlias}}
+      {{#cfg.service.dirAlias}}
+      "{{.}}": [ "{{cfg.service.dir}}" ],
+      "{{.}}/*": [ "{{cfg.service.dir}}/*" ],
+      {{/cfg.service.dirAlias}}
+      "!!filler": ["!!filler"]
+    }
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
+  }
+}
