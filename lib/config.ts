@@ -46,8 +46,10 @@ export function processArgs(): void {
     _config.inFile = args._[0];
     _config.modelDir = path.join(_config.outDir, 'src/model');
     _config.serviceDir = path.join(_config.outDir, 'src/service');
-    if (!_config.template)
+    if (!_config.template) {
         _config.template = path.join(__dirname, '..', 'templates', _config.server ? 'server' : 'client');
+        console.log('using default template: "' + _config.template + '"...');
+    }
 
     ensure(_config.outDir);
     ensure(_config.modelDir);
