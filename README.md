@@ -1,29 +1,29 @@
 
-# OpenApi typescript code generator for PiServices
+# OpenApi typescript code generator for Pomgui Rest
 
 Another code generator from [OpenAPI-specification](https://www.openapis.org/).
 
-The generated code uses the [piservices](https://github.com/pomgui/piservices) library as base for the REST services. This library uses decorators to improve the reading and writing of REST services source code.
+The generated code uses the [@pomgui/rest](https://github.com/pomgui/rest) library as base for the REST services. This library uses decorators to improve the reading and writing of REST services source code.
 
 ## Installation
 
-Use npm to install piservices-openapi.
+Use npm to install @pomgui/rest-codegen.
 
 ```bash
-npm install -g piservices-openapi
+npm install -g @pomgui/rest-codegen
 ```
 
 ## Usage
 
 ```bash
+Usage:
   picodegen [options] openapiSpec.yaml
 Options:
--v, --version              Show the version of the tool
--c, --client               Generates the typescript client version (angular)
--s, --server               Generates the typescript server version (express). Default.
--e, --include-extra-params Each operation will receive extra parameters {db, req, res}
--o, --outDir               Output directory (default ".")
--t, --template             Custom template directory
+--version Show the version of the tool
+--type    Type angular|express of the generated code (default: express)
+--out     Application root path (default ".")
+--src     Code output path relative to root (default "src")
+--custom  Custom template path (overrides --type)
 ```
 
 ## Example

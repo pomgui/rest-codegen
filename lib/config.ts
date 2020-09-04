@@ -1,85 +1,91 @@
 import * as jsyaml from 'js-yaml';
 import * as fs from 'fs';
 import * as path from 'path';
-import arg from 'arg';
 import * as tools from './tools';
 
 const options = {
     'version': [Boolean, 'v', 'Show the version of the tool'],
-    'client': [Boolean, 'c', 'Generates the typescript client version (angular)'],
-    'server': [Boolean, 's', 'Generates the typescript server version (express)'],
-    'include-extra-params': [Boolean, 'e', 'Each operation will receive extra parameters {db, req, res}'],
-    'outDir': [String, 'o', 'Output directory (default ".")'],
-    'template': [String, 't', 'Custom template directory']
+    'type': [String, 't', 'Type angular|express of the generated code (default: express)'],
+    // 'include-extra-params': [Boolean, 'e', 'Each operation will receive extra parameters {db, req, res}'],
+    'out': [String, 'o', 'Application root path (default ".")'],
+    'src': [String, 's', 'Code output path relative to root (default "src")'],
+    'custom': [String, 'c', 'Custom template path (overrides --type)']
 }
 
-var _config: { [i: string]: any } = {
-    version: false,
-    client: false,
-    server: true,
-    includeExtraParams: false,
-    inFile: '',
-    outDir: '.',
-    yaml: <any>{}
-};
+export class PiConfig {
+    version = false;
+    codeType: 'angular' | 'express' = 'angular';
+    outDir: string = '.';
+    srcDir = 'src';
+    modelDir = 'model';
+    serviceDir = 'service';
+    paramDir = 'model/param';
+    template = path.join(__dirname, '..', 'templates', this.codeType);
+    yaml: any = {};
+    inFile: string = '';
+    includeExtraParams = false;
+}
 
-export var config = _config;
+export const config = new PiConfig();
 
 export function processArgs(): void {
-    let ensure = (d: string) => tools.mkdirp(d);
-    let args: any;
-    try {
-        args = parseArgs();
-    } catch (e) {
-        console.error(e.message);
-        printUsage();
-    }
-    if (config.version) {
-        console.log('0.0.1');
-        process.exit(0);
-    }
-    if (args._.length != 1) {
-        console.error('OpenApi file not specified');
-        printUsage();
-    }
-
-    _config.inFile = args._[0];
-    _config.modelDir = path.join(_config.outDir, 'src/model');
-    _config.serviceDir = path.join(_config.outDir, 'src/service');
-    if (!_config.template) {
-        _config.template = path.join(__dirname, '..', 'templates', _config.server ? 'server' : 'client');
-        console.log('using default template: "' + _config.template + '"...');
-    }
-
-    ensure(_config.outDir);
-    ensure(_config.modelDir);
-    ensure(path.join(_config.modelDir, 'param'));
-    ensure(_config.serviceDir);
+    const ensure = (d: string) => tools.mkdirp(d);
+    parseArgs();
+    config.modelDir = path.join(config.outDir, config.srcDir, config.modelDir);
+    config.serviceDir = path.join(config.outDir, config.srcDir, config.serviceDir);
+    config.paramDir = path.join(config.modelDir, config.paramDir);
+    ensure(config.outDir);
+    ensure(config.modelDir);
+    ensure(config.paramDir);
+    ensure(config.serviceDir);
 
     config.yaml = jsyaml.load(fs.readFileSync(config.inFile, 'utf8'));
 }
 
-function parseArgs(): any {
-    let spec: any = {};
-    Object.entries(options)
-        .forEach(([option, data]) => {
-            spec['--' + option] = data[0];
-            spec['-' + data[1]] = '--' + option;
-        })
-    let args = arg(spec);
-    Object.entries(args)
-        .forEach(([option, value]) =>
-            _config[option.substr(2).replace(/-(.)/g, (g, g1) => g1.toUpperCase())] = value
-        );
-    return args;
+function parseArgs(): void {
+    const argv = process.argv;
+    for (let i = 2; i < argv.length; i++) {
+        let arg: any = argv[i].split('=');
+        let param;
+        if (arg.length == 2) param = arg[1];
+        arg = arg[0];
+
+        switch (arg) {
+            case '--version':
+                const pck = require(__dirname + '../../package.json');
+                console.log(pck.version);
+                process.exit(0);
+            case '--type':
+                config.codeType = param || argv[++i] as any; break;
+            case '--out':
+                config.outDir = param || argv[++i]; break;
+            case '--src':
+                config.srcDir = param || argv[++i]; break;
+            case '--custom':
+                config.template = param || argv[++i]; break;
+            default:
+                if (arg.startsWith('-')) printUsage(arg);
+                if (config.inFile) {
+                    console.error('Only one openapi file is allowed.');
+                    printUsage();
+                }
+                config.inFile = argv[++i];
+        }
+    }
+    if (!config.inFile) {
+        console.error('Openapi file is required.');
+        printUsage();
+    }
 }
 
-function printUsage() {
+function printUsage(arg?: string) {
     let usage = Object.entries(options)
-        .map(([option, data]) => `-${data[1]}, --${option}${' '.repeat(20)}`.substr(0, 27) + data[2])
+        .map(([option, data]) => `--${option}`.padEnd(10) + data[2])
         .join('\n');
+    if (arg)
+        console.log('Invalid option: "' + arg + '"');
     console.log('Usage:');
-    console.log('  picodegen [options] openapiSpec.yaml')
+    console.log('  restcodegen [options] openapiSpec.yaml')
     console.log('Options:');
     console.log(usage);
     process.exit(1);

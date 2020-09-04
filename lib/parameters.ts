@@ -23,7 +23,7 @@ export function writeParamFiles(paths: any): void {
                 });
         });
     fs.writeFileSync(
-        path.join(config.modelDir, 'param', 'index.ts'),
+        path.join(config.paramDir, 'index.ts'),
         files.map(f => `export * from './${f}';`).join('\n'),
         'utf8'
     );
@@ -43,7 +43,7 @@ function writeParamFile(uri: string, method: string, operation: any, file: strin
         + importList.map(i => `import { ${i} } from '../${i}';`).join('\n') + '\n\n'
         + code;
 
-    fs.writeFileSync(path.join(config.modelDir, 'param', file + '.ts'), code, 'utf8');
+    fs.writeFileSync(path.join(config.paramDir, file + '.ts'), code, 'utf8');
     return;
 
     function writeParams(type: string, params: any[], _extends: string[]): string {
