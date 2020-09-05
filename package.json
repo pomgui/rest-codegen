@@ -1,6 +1,6 @@
 {
   "name": "@pomgui/rest-codegen",
-  "version": "0.1.0-beta.2",
+  "version": "0.1.0-beta.3",
   "description": "Easy way to define REST services in typescript from Swagger/OpenApi definition file",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

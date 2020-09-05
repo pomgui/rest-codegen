@@ -14,7 +14,7 @@ const options = {
 
 export class PiConfig {
     version = false;
-    codeType: 'angular' | 'express' = 'angular';
+    codeType: 'angular' | 'express' = 'express';
     outDir: string = '.';
     srcDir = 'src';
     modelDir = 'model';
