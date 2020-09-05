@@ -10,8 +10,18 @@ export function writeApiFiles(paths: any) {
     let files = getTags(paths);
     Object.entries(files)
         .forEach(([name, methodList]) => writeApiFile(name, methodList));
+    const names = Object.keys(files);
+    const lines = [];
+    const servicesList = names.map(f => {
+        const service = tools.camelCase(f) + 'Api';
+        lines.push(`export * from './${f}';`);
+        lines.push(`import { ${service} } from './${f}';`);
+        return service;
+    });
+    lines.push('// Generated services list\nexport const servicesList = [\n' +
+        servicesList.join(', ') + '\n];');
     fs.writeFileSync(path.join(config.serviceDir, 'index.ts'),
-        Object.keys(files).map(f => `export * from './${f}'`).join('\n'),
+        lines.join('\n'),
         'utf8'
     );
 }
@@ -46,9 +56,9 @@ function writeApiFile(name: string, operations: any[]): void {
         .map(o => 'Pi' + o.toUpperCase());
     if (config.includeExtraParams)
         piserviceImports.push('PiExtraParams');
-    piserviceImports.push('PiError');
+    piserviceImports.push('PiRestError');
 
-    let impCode = `import { ${piserviceImports.join(', ')} } from 'piservices';\n`;
+    let impCode = `import { ${piserviceImports.join(', ')} } from '@pomgui/rest';\n`;
     if (entities.length)
         impCode += `import * as model from '../model';\n`;
     impCode += `import * as param from '../model/param';\n\n`;
@@ -73,7 +83,7 @@ function writeApiFile(name: string, operations: any[]): void {
         code += `Promise<${returnType}> {\n`
         errors.forEach(err => {
             code += `${T + T}if(/*condition*/false)\n`;
-            code += `${T + T + T}throw new PiError('${err.message}', ${err.status});\n`
+            code += `${T + T + T}throw new PiRestError('${err.message}', ${err.status});\n`
         })
         if (returnType != 'void') {
             code += T + T + `let value: ${returnType} = <${returnType}> ${returnType.endsWith('[]') ? '[]' : '{}'};\n`

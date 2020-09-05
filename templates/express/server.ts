@@ -1,36 +1,43 @@
+import { PiService } from '@pomgui/rest';
+import { PiDatabasePool } from '@pomgui/database';
+import { servicesList } from './{{ src-dir }}/service';
+import { Logger } from 'sitka';
 import express from 'express';
-import { PiDatabase, PiMySqlDatabase, PiService } from 'piservices';
-import { {{service-classes}} } from './src/service';
 
 // Create a new express application instance
-const app: express.Application = express();
-const port: number = parseInt(process.env.PORT || '8080');
-const services = [{{ service-classes }}];
+const _app = express();
+const _port = parseInt(process.env.PORT || '8080');
+const _logger = Logger.getLogger('main');
 
 main();
 
 function main() {
-    app.use(express.json());
-    app.use('{{base-path}}', PiService({ services, dbFactoryFn }));
+    _app.use(express.json());
+    _app.use('{{base-path}}', PiService({ servicesList, dbPool: _createDbPool() }));
 
     // Serve the application at the given port
-    app.listen(port, () => {
-        console.log(`Listening at http://localhost:${port}/`);
+    _app.listen(_port, () => {
+        _logger.info(`Listening at http://localhost:${_port}/`);
     });
 }
 
-function dbFactoryFn(): PiDatabase | null {
-    // Returns a new connection or null if no database connection is required
-    return null;
-    
+function _createDbPool(): PiDatabasePool | undefined {
+    // Returns a new connection or "undefined" if no database connection is required
+    return undefined;
+
     // Example1:
-    // return new PiMySqlDatabase({
+    // return new PiMySqlDatabasePool({
     //     host: 'localhost',
     //     user: 'appuser',
     //     password: 'appsecret',
     //     database: 'appdb'
-    // });
+    // }, 10);
 
     // Example2:
-    // return new PiMySqlDatabase('mysql://appuser:appsecret@localhost/appdb')
+    // return new PiFirebirdDatabasePool({
+    //     host: 'localhost',
+    //     user: 'appuser',
+    //     password: 'appsecret',
+    //     database: 'appdb.fdb'
+    // }, 10);
 }

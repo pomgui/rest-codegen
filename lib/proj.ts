@@ -11,26 +11,22 @@ export function writeProjFiles(): void {
 function copyFile(file: string): void {
     const outFile = path.join(config.outDir, file);
     if (fs.existsSync(outFile)) {
-        console.warn('warn: ' + file + ': already exists, skipped.');
-        return;
+        if (['package.json', 'tsconfig.json'].includes(file)) {
+            console.warn('warn: ' + file + ': already exists, skipped.');
+            return;
+        } else
+            console.warn('warn: ' + file + ': will be overwritten.');
     }
     let content = fs.readFileSync(path.join(config.template, file), 'utf8');
     let info = config.yaml.info;
     content = content.replace(/\{\{(.*)\}\}/g, (g, g1) => {
         switch (g1.trim()) {
             case 'project-version': return info.version || '1.0.0';
-            case 'project-name': return info.title.replace(/\s+/g, "-") || 'piservices-openapi-project';
+            case 'project-name': return info.title.replace(/\s+/g, "-") || 'pomguirest-openapi-project';
             case 'project-description': return info.description || 'Generated project';
-            case 'service-classes': return getServiceClasses().join(', ');
             case 'base-path': return config.yaml.basePath;
+            case 'src-dir': return path.basename(config.srcDir);
         }
     });
     fs.writeFileSync(outFile, content, 'utf8');
-}
-
-function getServiceClasses(): string[] {
-    let classes: string[] = []
-    Object.values(config.yaml.paths)
-        .forEach((path: any) => Object.values(path).forEach((o: any) => o.tags && classes.push(o.tags[0])));
-    return classes.filter(tools.distinct).map(c => tools.camelCase(c) + 'Api');
 }
