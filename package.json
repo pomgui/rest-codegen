@@ -1,0 +1,32 @@
+{
+  "name": "@pomgui/rest-codegen",
+  "version": "0.1.0-beta.3",
+  "description": "Easy way to define REST services in typescript from Swagger/OpenApi definition file",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prepare": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postversion": "git push && git push --tags"
+  },
+  "bin": {
+    "restcodegen": "bin/restcodegen"
+  },
+  "keywords": [],
+  "author": "Wilfredo <wilfredo@pomgui.com> (https://github.com/pomgui)",
+  "license": "MIT",
+  "dependencies": {
+    "js-yaml": "^3.13.1"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^3.12.1",
+    "@types/node": "^12.7.5",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.3"
+  },
+  "optionalDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pomgui/rest-codegen.git"
+  }
+}
