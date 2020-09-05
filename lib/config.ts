@@ -69,7 +69,7 @@ function parseArgs(): void {
                     console.error('Only one openapi file is allowed.');
                     printUsage();
                 }
-                config.inFile = argv[++i];
+                config.inFile = arg;
         }
     }
     if (!config.inFile) {
