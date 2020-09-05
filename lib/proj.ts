@@ -9,6 +9,11 @@ export function writeProjFiles(): void {
 }
 
 function copyFile(file: string): void {
+    const outFile = path.join(config.outDir, file);
+    if (fs.existsSync(outFile)) {
+        console.warn('warn: ' + file + ': already exists, skipped.');
+        return;
+    }
     let content = fs.readFileSync(path.join(config.template, file), 'utf8');
     let info = config.yaml.info;
     content = content.replace(/\{\{(.*)\}\}/g, (g, g1) => {
@@ -20,7 +25,7 @@ function copyFile(file: string): void {
             case 'base-path': return config.yaml.basePath;
         }
     });
-    fs.writeFileSync(path.join(config.outDir, file), content, 'utf8');
+    fs.writeFileSync(outFile, content, 'utf8');
 }
 
 function getServiceClasses(): string[] {
