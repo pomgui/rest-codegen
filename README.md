@@ -158,6 +158,16 @@ module.exports = {
 }
 ```
 
+### Database Pool
+The `databasePool` only has meaning for express projects, and if it
+has been configured, then the code generated will have an extra 
+parameter to the API operation: a database instance.
+
+This database instance has already created a new transaction
+and it automatically will execute a COMMIT if the operation returns
+normally or it will execute a ROLLBACK if the operation ends
+with an exception.
+
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to improve.
 

@@ -12,7 +12,7 @@ export class PiServiceFileView extends PiFileView {
     }
 
     prepareView(): object {
-        let view = new PiTypeFileView();
+        let view = new PiTypeFileView(this.proj);
         let me = this;
         let tag = config.yaml.tags.find((t: any) => t.name == this.baseName);
         if (!tag) tag = {};

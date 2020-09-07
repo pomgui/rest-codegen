@@ -9,7 +9,7 @@ export class PiModelFileView extends PiFileView {
         super(proj, proj.model, baseName);
     }
     prepareView(): object {
-        let view = new PiTypeFileView();
+        let view = new PiTypeFileView(this.proj);
         view.name = this.name;
 
         if (!this.def.type || this.def.type == 'object')

@@ -3,12 +3,15 @@
 import { {{.}} } from '{{module}}';
 {{/items}}
 {{/imports}}
+{{#cfg.databasePool}}
+import { PiDatabase } from '@pomgui/database';
+{{/cfg.databasePool}}
 
 {{#services}}
 export class {{name}} {
     {{#operations}}
     @Pi{{httpMETHOD}}('{{uri}}', {descriptor: {{name}}$})
-    async {{name}}(params: {{allParamsType}}{{#extraParam}}, extra: PiExtraParams{{/extraParam}}): Promise<{{returnType}}> {
+    async {{name}}(params: {{allParamsType}}{{#cfg.databasePool}}, db: PiDatabase{{/cfg.databasePool}}): Promise<{{returnType}}> {
         {{#errors}}
         if(/* condition */false)
             throw new PiRestError('{{message}}', {{status}});

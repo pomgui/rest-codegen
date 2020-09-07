@@ -1,6 +1,10 @@
 import { PiFieldDescriptor } from '@pomgui/rest-lib';
 import { PiServiceOperationView } from "./PiServiceOperationView";
-
+import { PiProjectConfig } from '../configType';
+/**
+ * View that be used for parameters, model, and services files.
+ * It contains all the necessary elements to create mustache templates
+ */
 export class PiTypeFileView {
     name: string = '';
     comment?: string;
@@ -14,7 +18,7 @@ export class PiTypeFileView {
         extends?: string;
         properties: PiFieldDescriptor[];
     }[] = [];
-    descriptor?: {name: string; value: string};
+    descriptor?: { name: string; value: string };
     enums: {
         comment?: string;
         name: string;
@@ -31,4 +35,7 @@ export class PiTypeFileView {
         basePath: string,
         operations: PiServiceOperationView[];
     }[] = [];
+
+
+    constructor(public cfg: PiProjectConfig) { }
 };
