@@ -11,7 +11,7 @@ export class PiParamsFileView extends PiFileView {
     }
 
     prepareView(): object {
-        let view = new PiTypeFileView();
+        let view = new PiTypeFileView(this.proj);
         let extendList: string[] = [];
         let importList: string[] = [];
         let descriptor = new PiTypeDescriptor();

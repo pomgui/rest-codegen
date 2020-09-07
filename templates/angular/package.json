@@ -8,8 +8,9 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
-  },
+    "e2e": "ng e2e",
+    "codegen": "git add -A && rest-codegen --config \"{{configFile}}\"",
+    },
   "author": {{openapi.author}},
   "private": true,
   "dependencies": {
