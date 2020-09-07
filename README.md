@@ -1,11 +1,9 @@
 
-# OpenApi typescript code generator for Pomgui Rest
+# OpenApi typescript code generator
 
 Another code generator from [OpenAPI-specification 2.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md).
 
 The generated code uses the [@pomgui/rest](https://github.com/pomgui/rest) library as base for the REST services. This library uses [decorators](https://www.typescriptlang.org/docs/handbook/decorators.html) to improve the reading and writing of REST services source code.
-
-**Note:** A full project structure ready to execute will be generated.
 
 ## Installation
 
@@ -28,36 +26,36 @@ npm install -g @pomgui/rest-codegen
 /pet/findByStatus:
   get:
     tags:
-    - "pet"
-    summary: "Finds Pets by status"
-    description: "Multiple status values can be provided with comma separated strings"
-    operationId: "findPetsByStatus"
+    - pet
+    summary: Finds Pets by status
+    description: Multiple status values can be provided with comma separated strings
+    operationId: findPetsByStatus
     produces:
-    - "application/json"
+    - application/json
     parameters:
-    - name: "status"
-    in: "query"
-    description: "Status values that need to be considered for filter"
+    - name: status
+      in: query
+    description: Status values that need to be considered for filter
     required: true
-    type: "array"
+    type: array
     items:
-      type: "string"
+      type: string
       enum:
-      - "available"
-      - "pending"
-      - "sold"
-      default: "available"
-    collectionFormat: "multi"
+      - available
+      - pending
+      - sold
+      default: available
+    collectionFormat: multi
     responses:
     200:
-      description: "successful operation"
+      description: successful operation
       schema:
-        type: "array"
+        type: array
         items:
-          $ref: "#/definitions/Pet"
+          $ref: '#/definitions/Pet'
     400:
-      description: "Invalid status value"
-...
+      description: Invalid status value
+    ...
 ```
 
 ### Express generated code
@@ -118,7 +116,6 @@ Example: If you have two projects: angular and express, probably both share the 
 ```javascript
 module.exports = {
   beforeAll: 'clean',
-  dir: '/mySystem',
   file: './pets.swagger.yaml',
   projects: [
     {

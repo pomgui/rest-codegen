@@ -24,8 +24,7 @@
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1",
-    '@pomgui/rest-lib': "file:/pi/pirest-lib",
-    "pirest-angular": "file:/pi/pirest-angular/dist/pirest-angular"
+    "@pomgui/rest-angular": "^0.1.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.803.10",
