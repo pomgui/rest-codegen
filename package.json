@@ -1,28 +1,36 @@
 {
   "name": "@pomgui/rest-codegen",
   "version": "0.1.0-beta.3",
-  "description": "Easy way to define REST services in typescript from Swagger/OpenApi definition file",
+  "description": "Typescript code generator from Swagger/OpenApi definition file using pirest lib",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "prepare": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "postversion": "git push && git push --tags"
+    "build": "tsc",
+    "postversion": "git push && git push --tags",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "restcodegen": "bin/restcodegen"
+    "rest-codegen": "./dist/rest-codegen.js",
+    "rest-pathfix": "./dist/rest-pathfix.js"
   },
   "keywords": [],
   "author": "Wilfredo <wilfredo@pomgui.com> (https://github.com/pomgui)",
   "license": "MIT",
   "dependencies": {
-    "js-yaml": "^3.13.1"
+    "@pomgui/rest-lib": "^0.1.0-beta.0",
+    "js-yaml": "^3.13.1",
+    "klaw": "^3.0.0",
+    "mustache": "^4.0.1",
+    "tslib": "^2.0.1"
   },
   "devDependencies": {
     "@types/js-yaml": "^3.12.1",
-    "@types/node": "^12.7.5",
-    "ts-node": "^8.4.1",
-    "typescript": "^3.6.3"
+    "@types/klaw": "^3.0.0",
+    "@types/mustache": "^4.0.1",
+    "@types/node": "^14.6.4",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.2"
   },
   "optionalDependencies": {},
   "repository": {

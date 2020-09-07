@@ -1,13 +1,13 @@
 
 # OpenApi typescript code generator for Pomgui Rest
 
-Another code generator from [OpenAPI-specification](https://www.openapis.org/).
+Another code generator from [OpenAPI-specification 2.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md).
 
-The generated code uses the [@pomgui/rest](https://github.com/pomgui/rest) library as base for the REST services. This library uses decorators to improve the reading and writing of REST services source code.
+The generated code uses the [@pomgui/rest](https://github.com/pomgui/rest) library as base for the REST services. This library uses [decorators](https://www.typescriptlang.org/docs/handbook/decorators.html) to improve the reading and writing of REST services source code.
+
+**Note:** A full project structure ready to execute will be generated.
 
 ## Installation
-
-Use npm to install @pomgui/rest-codegen.
 
 ```bash
 npm install -g @pomgui/rest-codegen
@@ -15,15 +15,8 @@ npm install -g @pomgui/rest-codegen
 
 ## Usage
 
-```bash
-Usage:
-  picodegen [options] openapiSpec.yaml
-Options:
---version Show the version of the tool
---type    Type angular|express of the generated code (default: express)
---out     Application root path (default ".")
---src     Code output path relative to root (default "src")
---custom  Custom template path (overrides --type)
+```
+  rest-codegen --config file.conf.js [project1...]
 ```
 
 ## Example
@@ -40,7 +33,6 @@ Options:
     description: "Multiple status values can be provided with comma separated strings"
     operationId: "findPetsByStatus"
     produces:
-    - "application/xml"
     - "application/json"
     parameters:
     - name: "status"
@@ -60,15 +52,17 @@ Options:
     200:
       description: "successful operation"
       schema:
-      type: "array"
-      items:
-        $ref: "#/definitions/Pet"
+        type: "array"
+        items:
+          $ref: "#/definitions/Pet"
     400:
       description: "Invalid status value"
 ...
 ```
 
-### Server generated code
+### Express generated code
+
+#### Service files
 
 ```typescript
 /**    
@@ -76,17 +70,99 @@ Options:
  * Multiple status values can be provided with comma separated strings
  */
 @PiGET('/pet/findByStatus')
-async findPetsByStatus(params: param.FindPetsByStatusParams, extra: PiExtraParams): Promise<model.Pet[]> {
+async findPetsByStatus(params: FindPetsByStatusParams): Promise<Pet[]> {
     if(/*condition*/false)
         throw new PiError('Invalid status value', 400);
-    let value: model.Pet[] = <model.Pet[]> [];
+    let value: Pet[] = <Pet[]> [];
     /* fill 'value' here */
     return value;
 }
 ```
 
+#### Service parameter files
+
+```typescript
+/** Parameters sent in the query */
+export interface FindPetsByStatusParamsQuery  {
+    /**    
+     * Status values that need to be considered for filter
+     */
+    status: ('available'|'pending'|'sold')[];
+}
+/** Structure with ALL the operation parameters */
+export interface FindPetsByStatusParams extends FindPetsByStatusParamsQuery { }
+```
+
+#### Service model files
+
+```typescript
+export interface Pet {
+    id?: number;
+    category?: Category;
+    name: string;
+    photoUrls: string[];
+    tags?: Tag[];
+    status?: 'available'|'pending'|'sold';
+}
+```
+
+## Configuration file
+
+The configuration file defines the way the code will be generated. 
+All the projects will be altered.
+
+Example: If you have two projects: angular and express, probably both share the same DTOs and define the same Rest API calls, so they will need be sync'ed when the swagger file changes.
+
+### Example
+
+```javascript
+module.exports = {
+  beforeAll: 'clean',
+  dir: '/mySystem',
+  file: './pets.swagger.yaml',
+  projects: [
+    {
+      name: 'server01',
+      type: 'express',
+      dir: './server',
+      model: {
+        dir: 'openapi/model',
+        suffix: 'Dto'
+      },
+      params: {
+        dir: 'openapi/params',
+        beforeAll: 'none',
+        overwrite: true,
+        prefix: 'Prm'
+      },
+      services: {
+        dir: 'openapi/service',
+        suffix: 'Api'
+      },
+      databasePool: {
+        type: 'firebird',
+        size: 10,
+        options: {
+          host: 'localhost',
+          port: 3050,
+          user: 'sysdba',
+          password: 'masterkey',
+          database: 'clients.fdb'
+        }
+      }
+    },
+    {
+      name: 'clientAngular',
+      type: 'angular',
+      dir: 'client',
+      ...
+    }
+  }
+}
+```
+
 ## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to improve.
 
 Please make sure to update tests as appropriate.
 
