@@ -9,7 +9,9 @@ const pck = require('../../package.json');
 interface PiView {
     picodegen: { version: string };
     /** Services generated files directory (or alias if it exists) */
-    service: { dir: string };
+    services: { dir: string };
+    /** Parameter directory */
+    params: { dir: string };
     /** Some OpenApi attributes */
     openapi: {
         name: string;
@@ -62,17 +64,23 @@ export class PiOtherTemplFileView extends PiFileView {
                 description: info.description || 'picodegen generated project',
                 author: JSON.stringify(info.contact || '')
             });
-        let dirname = path.relative(path.dirname(this.fileName), this.proj.services.dir);
-        if (!dirname.startsWith('.'))
-            dirname = './' + dirname;
+        const getDirname = (type: 'services' | 'model' | 'params') => {
+            let dirname = path.relative(path.dirname(this.fileName), this.proj[type].dir);
+            if (!dirname.startsWith('.'))
+                dirname = './' + dirname
+            return this.proj[type].dirAlias || dirname;
+        }
         return <PiView>{
             picodegen: { version: pck.version },
             cfg: this.proj,
             configFile: config.configFile,
             openapi,
-            service: {
-                dir: this.proj.services.dirAlias || dirname
-            }
+            services: { dir: getDirname('services') },
+            params: { dir: getDirname('params') },
+            dbDriver: this.proj.databasePool 
+                && (this.proj.databasePool.type == 'mysql' 
+                ? '"mysql": "^2.17.1"'
+                : '"node-firebird": "^0.9.6"')
         };
     }
 }

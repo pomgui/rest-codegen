@@ -3,7 +3,7 @@ import { PiService } from '@pomgui/rest';
 {{#cfg.databasePool}}
 import { Pi{{type}}Pool } from '@pomgui/database';
 {{/cfg.databasePool}}
-import { services } from '{{service.dir}}';
+import { services } from '{{services.dir}}';
 import { descriptors } from '{{params.dir}}';
 
 // Create a new express application instance

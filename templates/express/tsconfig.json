@@ -7,6 +7,8 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "baseUrl": ".",
+    "noEmitHelpers": true,
+    "importHelpers": true,
     "paths": {
       {{#cfg.model.dirAlias}}
       "{{.}}": [ "{{cfg.model.dir}}" ],
