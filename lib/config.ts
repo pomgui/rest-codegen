@@ -5,6 +5,7 @@ import { PiConfig, PiComponentConfig, PiProjectConfig } from './configType';
 import { misc } from './tools/misc';
 import { fs2 } from './tools/file';
 import { str } from './tools/string';
+import { JSONtoJS } from './tools';
 
 type _PiArgs = { configFile: string, projects: string[], debug: boolean };
 
@@ -47,8 +48,7 @@ class _PiConfig implements PiConfig {
                 else
                     prj.databasePool.type = 'Firebird' as any;
                 // The options as a string
-                prj.databasePool.options = JSON.stringify(prj.databasePool.options, null, 2)
-                    .replace(/"([^"]+)":/g, '$1:').replace(/"/g, '\'');
+                prj.databasePool.options = JSONtoJS(prj.databasePool.options, 2);
             }
         });
     }

@@ -33,3 +33,8 @@ function wrap(text: string): string {
     }
     return lines.join('\n');
 }
+
+export function JSONtoJS(obj: any, tab?: number): string {
+    return JSON.stringify(obj, null, tab)
+        .replace(/"([^"]+)":/g, '$1:').replace(/"/g, '\'');
+}

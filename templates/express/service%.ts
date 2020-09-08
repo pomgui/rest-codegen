@@ -10,14 +10,14 @@ import { PiDatabase } from '@pomgui/database';
 {{#services}}
 export class {{name}} {
     {{#operations}}
-    @Pi{{httpMETHOD}}('{{uri}}', {descriptor: {{name}}$})
+    @Pi{{httpMETHOD}}('{{uri}}', { descriptor: {{name}}${{#security}}, security: {{.}}{{/security}} })
     async {{name}}(params: {{allParamsType}}{{#cfg.databasePool}}, db: PiDatabase{{/cfg.databasePool}}): Promise<{{returnType}}> {
         {{#errors}}
-        if(/* condition */false)
+        if (/* condition */false)
             throw new PiRestError('{{message}}', {{status}});
         {{/errors}}
         {{^returnsVoid}}
-        let value: {{returnType}} = <{{returnType}}>{};
+        let value: {{returnType}} = {{returnObj}} as {{returnType}};
         /* fill 'value' here */
         return value;
         {{/returnsVoid}}

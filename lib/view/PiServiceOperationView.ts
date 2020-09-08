@@ -17,7 +17,9 @@ export interface PiServiceOperationView {
     extraParam: boolean;
     returnType: string;
     returnsVoid?: boolean;
+    returnObj: string;
     errors: PiServiceOperationErrorView[];
+    security?: string;
 }
 
 export interface PiServiceOperationErrorView {

@@ -25,7 +25,7 @@ export class PiModelFileView extends PiFileView {
         let me = this;
         let props: PiFieldDescriptor[] = [];
         let intf = {
-            comment: this.def.description,
+            comment: asComment(this.def.description),
             name: this.name,
             extends: '',
             properties: props

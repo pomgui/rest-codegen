@@ -4,7 +4,7 @@ import { config } from "../config";
 import { PiTypeFileView } from "./PiTypeFileView";
 import { PiFileView } from "./PiFileView";
 import { PiField } from '@pomgui/rest-lib';
-import { misc, fs2, str, TAB, asComment } from "../tools";
+import { misc, fs2, str, TAB, asComment, JSONtoJS } from "../tools";
 
 export class PiServiceFileView extends PiFileView {
     constructor(proj: PiProjectConfig, baseName: string, protected defs: any[]) {
@@ -31,6 +31,7 @@ export class PiServiceFileView extends PiFileView {
                 }
                 paramImports.push(descriptorName);
                 let { parameters, apiParams } = createParams(o);
+                let security = o.security && (o.security.length == 1 ? o.security[0] : o.security);
                 let operation: PiServiceOperationView = {
                     comment: asComment([o.summary, o.description], TAB),
                     name: o.operationId,
@@ -42,8 +43,13 @@ export class PiServiceFileView extends PiFileView {
                     httpMETHOD: o.$$method,
                     uri: o.$$uri.replace(/\{(.*?)\}/g, ':$1'), // express notation
                     errors,
-                    returnType: this._returnTypeOf(o, errors, modelImports)
+                    returnType: this._returnTypeOf(o, errors, modelImports),
+                    returnObj: '{}',
                 };
+                if (security)
+                    operation.security = JSONtoJS(security)
+                if (/\[\]|Array</.test(operation.returnType))
+                    operation.returnObj = '[]';
                 if (this.proj.type == 'express') {
                     if (errors.length)
                         pirestImports.push('PiRestError');
