@@ -10,7 +10,7 @@ import { PiDatabase } from '@pomgui/database';
 {{#services}}
 export class {{name}} {
     {{#operations}}
-    @Pi{{httpMETHOD}}('{{uri}}', { descriptor: {{name}}${{#security}}, security: {{.}}{{/security}} })
+    @Pi{{httpMETHOD}}('{{uri}}'{{#security}}, { security: {{.}} }{{/security}})
     async {{name}}(params: {{allParamsType}}{{#cfg.databasePool}}, db: PiDatabase{{/cfg.databasePool}}): Promise<{{returnType}}> {
         {{#errors}}
         if (/* condition */false)

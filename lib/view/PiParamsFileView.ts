@@ -5,6 +5,7 @@ import { PiFieldDescriptor, PiTypeDescriptor } from '@pomgui/rest-lib';
 import { str, misc, fs2, TAB, asComment } from "../tools";
 
 export class PiParamsFileView extends PiFileView {
+    descriptors: PiTypeDescriptor[] = [];
 
     constructor(proj: PiProjectConfig, baseName: string, protected operation: any) {
         super(proj, proj.params, baseName);
@@ -14,7 +15,7 @@ export class PiParamsFileView extends PiFileView {
         let view = new PiTypeFileView(this.proj);
         let extendList: string[] = [];
         let importList: string[] = [];
-        let descriptor = new PiTypeDescriptor();
+        let descriptor = new PiTypeDescriptor(this.operation.operationId);
 
         view.name = this.name;
         view.comment = asComment([
@@ -45,13 +46,9 @@ export class PiParamsFileView extends PiFileView {
                         return field;
                     })
                 });
-
-                if (source == 'all')
-                    view.descriptor = {
-                        name: this.operation.operationId + '$',
-                        value: JSON.stringify(descriptor.render())
-                    };
             });
+
+        this.descriptors.push(descriptor);
 
         view.imports.push({
             module: this.proj.model.dirAlias || fs2.relativePath(this.cfg.dir, this.proj.model.dir),

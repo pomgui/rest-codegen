@@ -4,6 +4,7 @@ import { PiService } from '@pomgui/rest';
 import { Pi{{type}}Pool } from '@pomgui/database';
 {{/cfg.databasePool}}
 import { services } from '{{service.dir}}';
+import { descriptors } from '{{params.dir}}';
 
 // Create a new express application instance
 const app = express();
@@ -19,11 +20,12 @@ function main() {
     {{#cfg.databasePool}}
     app.use('{{openapi.basePath}}', PiService({ 
         services, 
+        descriptors,
         dbPool: new Pi{{type}}Pool(options, {{size}}) 
     }));
     {{/cfg.databasePool}}
     {{^cfg.databasePool}}
-    app.use('{{openapi.basePath}}', PiService({ services }));
+    app.use('{{openapi.basePath}}', PiService({ services, descriptors }));
     {{/cfg.databasePool}}
 
     // Serve the application at the given port

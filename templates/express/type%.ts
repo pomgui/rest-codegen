@@ -15,9 +15,7 @@ export interface {{name}}{{#extends}} extends {{extends}}{{/extends}} {
 }
 
 {{/interfaces}}
-{{#descriptor}}
-export const {{name}} = {{value}};
-{{/descriptor}}
+
 {{#enums}}
 {{comment}}
 export enum {{name}} {

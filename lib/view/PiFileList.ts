@@ -1,5 +1,7 @@
 import { PiComponentConfig } from "../configType";
 import { PiFileView } from "./PiFileView";
+import { PiTypeDescriptor } from '@pomgui/rest-lib';
+import { JSONtoJS } from '../tools';
 
 export class PiFileList {
     private _files: PiFileView[] = [];
@@ -8,6 +10,19 @@ export class PiFileList {
 
     filesCsv(): string {
         return this._files.map(f => f.name).join(', ')
+    }
+
+    descriptors(): { name: string, value: string }[] | undefined {
+        const descriptors: PiTypeDescriptor[] = [];
+        this._files.forEach(file => {
+            const desc = (file as any).descriptors;
+            if (!desc) return;
+            descriptors.push(...desc);
+        });
+        return descriptors.map(d => ({
+            name: d.name,
+            value: JSONtoJS(d.render())
+        }));
     }
 
     push(file: PiFileView) {

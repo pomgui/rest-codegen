@@ -11,9 +11,9 @@ export interface PiServiceOperationView {
     /** Type for all parameters (path+query+body+header) */
     allParamsType: string;
     /** list of parameters: path and body parameters are listed individually, query and header parameters are related to a Type */
-    parameters: PiField[];
+    parameters?: PiField[];
     /** pirest.PiApiCaller parameter to replace in the mustache "as is" */
-    apiParams: string,
+    apiParams?: string,
     extraParam: boolean;
     returnType: string;
     returnsVoid?: boolean;

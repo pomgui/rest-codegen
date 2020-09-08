@@ -23,21 +23,16 @@ export class PiServiceFileView extends PiFileView {
         let operations: PiServiceOperationView[] =
             this.defs.map(o => {
                 let allParamsType = this.proj.params.name(o.operationId);
-                let descriptorName = o.operationId + '$';
                 let errors: PiServiceOperationErrorView[] = [];
                 if (this.proj.type == 'express') {
                     pirestImports.push('Pi' + o.$$method);
                     paramImports.push(allParamsType);
                 }
-                paramImports.push(descriptorName);
-                let { parameters, apiParams } = createParams(o);
                 let security = o.security && (o.security.length == 1 ? o.security[0] : o.security);
                 let operation: PiServiceOperationView = {
                     comment: asComment([o.summary, o.description], TAB),
                     name: o.operationId,
                     allParamsType,
-                    parameters,
-                    apiParams: this.proj.type == 'angular' ? apiParams : '',
                     extraParam: !!this.proj.services.extraParam,
                     httpMethod: o.$$method.toLowerCase(),
                     httpMETHOD: o.$$method,
@@ -46,6 +41,8 @@ export class PiServiceFileView extends PiFileView {
                     returnType: this._returnTypeOf(o, errors, modelImports),
                     returnObj: '{}',
                 };
+                if (this.proj.type == 'angular')
+                    Object.assign(operation, createParams(o));
                 if (security)
                     operation.security = JSONtoJS(security)
                 if (/\[\]|Array</.test(operation.returnType))
