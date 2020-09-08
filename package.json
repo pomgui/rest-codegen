@@ -18,7 +18,7 @@
   "author": "Wilfredo <wilfredo@pomgui.com> (https://github.com/pomgui)",
   "license": "MIT",
   "dependencies": {
-    "@pomgui/rest-lib": "^0.1.0-beta.0",
+    "@pomgui/rest-lib": "^0.1.0",
     "js-yaml": "^3.13.1",
     "klaw": "^3.0.0",
     "mustache": "^4.0.1",
